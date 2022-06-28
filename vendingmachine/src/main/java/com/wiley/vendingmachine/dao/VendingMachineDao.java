@@ -14,40 +14,34 @@ public class VendingMachineDao {
 	private ArrayList<Item> items = new ArrayList<Item>();
 	
 	private final String file;
-	private final String delimiter = ",";
+	private final String delimiter;
 	
-	public VendingMachineDao(String f) {
+	public VendingMachineDao(String f, String d) throws Exception
+	{
 		file = f;
-		try
+		delimiter = d;
+		
+		Scanner fileInput = new Scanner(
+								new BufferedReader(
+										new FileReader(file)));
+		while(fileInput.hasNextLine())
 		{
-			Scanner fileInput = new Scanner(
-									new BufferedReader(
-											new FileReader(file)));
-			while(fileInput.hasNextLine())
-			{
-				String line = fileInput.nextLine();
-				String[] item = line.split(delimiter);
-				items.add(new Item(item[0], item[1], Byte.parseByte(item[2])));
-			}
-			fileInput.close();
+			String line = fileInput.nextLine();
+			String[] item = line.split(delimiter);
+			items.add(new Item(item[0], item[1], Byte.parseByte(item[2])));
 		}
-		catch (Exception e)
-		{
-			
-		}
+		fileInput.close();
+		System.out.println("Loaded " + items.size() + " items from " + file);
 	}
 	
-	public void commit()
+	public void commit() throws Exception
 	{
-		try
+		PrintWriter fileOut = new PrintWriter(new FileWriter(file));
+		for(Item item : items)
 		{
-			PrintWriter fileOut = new PrintWriter(new FileWriter(file));
-			fileOut.close();
+			fileOut.println(item.getName() + delimiter + item.getCost() + delimiter + item.getStock());
 		}
-		catch (Exception e)
-		{
-			
-		}
+		fileOut.close();
 	}
 
 	public ArrayList<Item> getItems()

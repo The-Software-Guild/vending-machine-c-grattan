@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import com.wiley.vendingmachine.view.*;
 import com.wiley.vendingmachine.controller.*;
+import com.wiley.vendingmachine.dao.VendingMachineDao;
+import com.wiley.vendingmachine.service.VendingMachineService;
 
 public class App 
 {
@@ -13,8 +15,18 @@ public class App
         UserIO io = new UserIO(in);
         VendingMachineView view = new VendingMachineView(io);
         
-        VendingMachineController controller = new VendingMachineController(view);
-        controller.run();
+        try
+        {
+        	VendingMachineDao dao = new VendingMachineDao("Catalog.txt", ",");
+        	VendingMachineService service = new VendingMachineService(dao);
+            
+            VendingMachineController controller = new VendingMachineController(view, service);
+            controller.run();
+        }
+        catch (Exception e)
+        {
+        	System.out.println("Error: Could not open catalog");
+        }
     }
     
 }
