@@ -36,6 +36,16 @@ public class UserIO {
 		return input;
 	}
 	
+	public String getRegexString(String regex)
+	{
+		String input = "";
+		do
+		{
+			input = in.nextLine();
+		} while(!input.matches(regex));
+		return input;
+	}
+	
 	public int getInt()
 	{
 		return getInt(Integer.MIN_VALUE, Integer.MAX_VALUE);

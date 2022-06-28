@@ -25,7 +25,7 @@ public class App
         }
         catch (Exception e)
         {
-        	System.out.println("Error: Could not open catalog");
+        	System.err.println("Error: Could not open catalog");
         }
     }
     

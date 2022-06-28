@@ -19,6 +19,11 @@ public class VendingMachineController {
 		service = s;
 	}
 	
+	private void addMoney()
+	{
+		wallet = wallet.add(view.getMoney());
+	}
+	
 	public void run()
 	{
 		boolean running = true;
@@ -27,6 +32,7 @@ public class VendingMachineController {
 			switch(view.displayMenu())
 			{
 			case 1:
+				addMoney();
 				break;
 			case 2:
 				break;
