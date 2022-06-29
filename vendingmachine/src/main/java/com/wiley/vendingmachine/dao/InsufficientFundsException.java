@@ -2,6 +2,11 @@ package com.wiley.vendingmachine.dao;
 
 public class InsufficientFundsException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public InsufficientFundsException() {
 		// TODO Auto-generated constructor stub
 	}

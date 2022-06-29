@@ -2,6 +2,11 @@ package com.wiley.vendingmachine.dao;
 
 public class ItemNotFoundException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ItemNotFoundException() {
 		// TODO Auto-generated constructor stub
 	}

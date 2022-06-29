@@ -1,15 +1,17 @@
 package com.wiley.vendingmachine.dto;
 
+import java.math.BigDecimal;
+
 public enum Coin {
-	penny(1),
-	nickel(5),
-	dime(10),
-	quarter(25);
+	Quarters("0.25"),
+	Dimes("0.1"),
+	Nickels("0.05"),
+	Pennies("0.01");
 	
-	public final int value;
+	public final BigDecimal value;
 	
-	private Coin(int v)
+	private Coin(String v)
 	{
-		value = v;
+		value = new BigDecimal(v);
 	}
 };

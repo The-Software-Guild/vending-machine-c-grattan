@@ -1,28 +1,23 @@
 package com.wiley.vendingmachine.controller;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import com.wiley.vendingmachine.view.*;
 import com.wiley.vendingmachine.service.*;
 
 public class VendingMachineController {
-
-	BigDecimal wallet = new BigDecimal("0");
 	
 	VendingMachineView view;
 	VendingMachineService service;
 	
 	public VendingMachineController(VendingMachineView v, VendingMachineService s) {
-		wallet = wallet.setScale(2, RoundingMode.FLOOR);
+		
 		view = v;
 		service = s;
 		view.loadStatus(s.getItems());
 	}
 	
-	private void addMoney()
+	public void addMoney()
 	{
-		wallet = wallet.add(view.getMoney());
+		service.addMoney(view.getMoney());
 	}
 	
 	private void displayItems()
@@ -35,14 +30,14 @@ public class VendingMachineController {
 		boolean running = true;
 		while(running)
 		{
-			switch(view.displayMenu(wallet))
+			switch(view.displayMenu(service.getWallet()))
 			{
 			case 1:
 				addMoney();
 				break;
 			case 2:
 				displayItems();
-				wallet = service.tryPurchase(view.getName(), wallet);
+				view.prompt(service.tryPurchase(view.getName()));
 				break;
 			case 3:
 				if(running = !service.tryCommit())

@@ -2,6 +2,11 @@ package com.wiley.vendingmachine.dao;
 
 public class NoItemInventoryException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public NoItemInventoryException() {
 		// TODO Auto-generated constructor stub
 	}
