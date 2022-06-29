@@ -4,14 +4,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import com.wiley.vendingmachine.dto.*;
 
 public class VendingMachineDao {
 
-	private ArrayList<Item> items = new ArrayList<Item>();
+	private HashSet<Item> items = new HashSet<Item>();
 	
 	private final String file;
 	private final String delimiter;
@@ -31,7 +32,6 @@ public class VendingMachineDao {
 			items.add(new Item(item[0], item[1], Byte.parseByte(item[2])));
 		}
 		fileInput.close();
-		System.out.println("Loaded " + items.size() + " items from " + file);
 	}
 	
 	public void commit() throws Exception
@@ -44,8 +44,34 @@ public class VendingMachineDao {
 		fileOut.close();
 	}
 
-	public ArrayList<Item> getItems()
+	public HashSet<Item> getItems()
 	{
 		return items;
+	}
+	
+	public BigDecimal purchase(String itemName, BigDecimal wallet) throws 	InsufficientFundsException,
+																			NoItemInventoryException,
+																			ItemNotFoundException
+	{
+		for(Item item : items)
+		{
+			if(item.getName().toLowerCase().equals(itemName.toLowerCase()))
+			{
+				if(item.getStock() == 0)
+				{
+					throw new NoItemInventoryException();
+				}
+				else if(item.getCost().compareTo(wallet) > 0)
+				{
+					throw new InsufficientFundsException();
+				}
+				else
+				{
+					item.decrementStock();
+					return wallet.subtract(item.getCost());
+				}
+			}
+		}
+		throw new ItemNotFoundException();
 	}
 }

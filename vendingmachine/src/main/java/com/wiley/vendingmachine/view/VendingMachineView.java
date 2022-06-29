@@ -1,8 +1,9 @@
 package com.wiley.vendingmachine.view;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
-import com.wiley.vendingmachine.view.UserIO;
+import com.wiley.vendingmachine.dto.Item;
 
 public class VendingMachineView {
 
@@ -14,9 +15,9 @@ public class VendingMachineView {
 		io = i;
 	}
 
-	public int displayMenu()
+	public int displayMenu(BigDecimal wallet)
 	{
-		return io.getInt("Select your vending machine interaction:\n1. Insert money\n2. Purchase item\n3. Exit", 1, 3);
+		return io.getInt("\nSelect your vending machine interaction:\n1. Insert money (you have " + wallet + ")\n2. Purchase item\n3. Exit\n", 1, 3);
 	}
 	
 	public void prompt(String msg)
@@ -28,5 +29,26 @@ public class VendingMachineView {
 	{
 		io.print("Enter an amount of money: ");
 		return new BigDecimal(io.getRegexString(CURRENCY_REGEX));
+	}
+	
+	public String getName()
+	{
+		return io.getString("Which item would you like to purchase?\n");
+	}
+	
+	public void displayItems(Set<Item> items, boolean outOfStock)
+	{
+		items.stream().forEach((item) -> {
+			if(outOfStock || item.getStock() > 0)
+			{
+				io.println(item.getName() + ": " + item.getCost());
+			}
+		});
+	}
+	
+	public void loadStatus(Set<Item> items)
+	{
+		io.println("Loaded " + items.size() + " items:");
+		displayItems(items, true);
 	}
 }

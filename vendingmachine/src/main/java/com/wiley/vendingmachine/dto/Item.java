@@ -18,6 +18,26 @@ public class Item {
 		stock = s;
 	}
 	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o == null)
+		{
+			return false;
+		}
+		else
+		{
+			if(o instanceof Item && ((Item) o).getName().equals(name))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -33,8 +53,8 @@ public class Item {
 		return stock;
 	}
 	
-	public void setStock(byte s)
+	public void decrementStock()
 	{
-		stock = s;
+		stock--;
 	}
 }

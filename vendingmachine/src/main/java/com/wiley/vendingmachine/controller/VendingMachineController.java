@@ -17,6 +17,7 @@ public class VendingMachineController {
 		wallet = wallet.setScale(2, RoundingMode.FLOOR);
 		view = v;
 		service = s;
+		view.loadStatus(s.getItems());
 	}
 	
 	private void addMoney()
@@ -24,17 +25,24 @@ public class VendingMachineController {
 		wallet = wallet.add(view.getMoney());
 	}
 	
+	private void displayItems()
+	{
+		view.displayItems(service.getItems(), false);
+	}
+	
 	public void run()
 	{
 		boolean running = true;
 		while(running)
 		{
-			switch(view.displayMenu())
+			switch(view.displayMenu(wallet))
 			{
 			case 1:
 				addMoney();
 				break;
 			case 2:
+				displayItems();
+				wallet = service.tryPurchase(view.getName(), wallet);
 				break;
 			case 3:
 				if(running = !service.tryCommit())
