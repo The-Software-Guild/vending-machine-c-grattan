@@ -1,5 +1,6 @@
 package com.wiley.vendingmachine.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Set;
@@ -18,15 +19,31 @@ public class VendingMachineService {
 	{
 		wallet = wallet.setScale(2, RoundingMode.FLOOR);
 		dao = d;
+		audit("Started vending machine service");
 	}
 
+	private String audit(String msg)
+	{
+		try
+		{
+			dao.logEntry(msg);
+		}
+		catch (IOException e)
+		{
+			System.err.println("Warning: could not update log");
+		}
+		return msg;
+	}
+	
 	public BigDecimal getWallet()
 	{
+		audit("Fetched wallet");
 		return wallet;
 	}
 	
 	public void addMoney(BigDecimal money)
 	{
+		audit("Added " + money + " to wallet");
 		wallet = wallet.add(money);
 	}
 	
@@ -38,13 +55,16 @@ public class VendingMachineService {
 		}
 		catch (Exception e)
 		{
+			audit("Error committing changes to catalog");
 			return false;
 		}
+		audit("Committed changes to catalog");
 		return true;
 	}
 	
 	public Set<Item> getItems()
 	{
+		audit("Fetched catalog");
 		return dao.getItems();
 	}
 	
@@ -57,6 +77,7 @@ public class VendingMachineService {
 			wallet = result[1];
 			change.append(c + ": " + result[0] + "\n");
 		}
+		change.deleteCharAt(change.lastIndexOf("\n"));
 		return change.toString();
 	}
 	
@@ -65,19 +86,19 @@ public class VendingMachineService {
 		try
 		{
 			wallet = dao.purchase(item, wallet);
-			return item + " purchased!\nYour change is:\n" + convertToChange();
+			return audit(item + " purchased!\nYour change is:\n" + convertToChange());
 		}
 		catch (InsufficientFundsException e)
 		{
-			return "Insufficient funds";
+			return audit("Insufficient funds");
 		}
 		catch (NoItemInventoryException e)
 		{
-			return "There is no " + item + " left";
+			return audit("There is no " + item + " left");
 		}
 		catch (ItemNotFoundException e)
 		{
-			return item + " not found";
+			return audit(item + " not found");
 		}
 	}
 }

@@ -17,7 +17,7 @@ public class App
         
         try
         {
-        	VendingMachineDao dao = new VendingMachineDao("Catalog.txt", ",");
+        	VendingMachineDao dao = new VendingMachineDao("Catalog.txt", "Audit.txt", ",");
         	VendingMachineService service = new VendingMachineService(dao);
             
             VendingMachineController controller = new VendingMachineController(view, service);
