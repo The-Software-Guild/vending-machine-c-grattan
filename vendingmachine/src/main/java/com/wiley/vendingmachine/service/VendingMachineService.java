@@ -86,7 +86,7 @@ public class VendingMachineService {
 		try
 		{
 			wallet = dao.purchase(item, wallet);
-			return audit(item + " purchased!\nYour change is:\n" + convertToChange());
+			return audit(item + " purchased! Your change is:\n" + convertToChange());
 		}
 		catch (InsufficientFundsException e)
 		{
