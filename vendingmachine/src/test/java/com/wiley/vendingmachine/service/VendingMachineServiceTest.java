@@ -1,8 +1,6 @@
 package com.wiley.vendingmachine.service;
 
 import com.wiley.vendingmachine.dao.VendingMachineDao;
-import com.wiley.vendingmachine.dto.Item;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -67,6 +65,7 @@ public class VendingMachineServiceTest {
 			out.close();
 			
 			dao = setUpTestDao();
+			service = new VendingMachineService(dao);
 		}
 		catch (Exception e)
 		{
@@ -184,6 +183,7 @@ public class VendingMachineServiceTest {
 	public void tryPurchaseTest()
 	{
 		resetWallet();
+		restock();
 		clearLog();
 		
 		service.addMoney(new BigDecimal("2.4"));
@@ -205,5 +205,13 @@ public class VendingMachineServiceTest {
 					+ "1";
 		
 		Assertions.assertEquals(expected, getLogEntries());
+		
+		service.tryCommit();
+		
+		expected =	"Water,0.00,124\n"
+					+ "Cola,1.99,94\n"
+					+ "Orange,0.99,98";
+		
+		Assertions.assertEquals(expected, getCatalog());
 	}
 }
